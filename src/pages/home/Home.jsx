@@ -5,14 +5,32 @@ import ArticleListItem from "../../components/ArticleListItem/ArticleListItem";
 import Footer from "../../components/Footer/Footer";
 import PeopleList from "../../components/PeopleList/PeopleList";
 import TopicsToFollow from "../../components/TopicsToFollow/TopicsToFollow";
-import articles from "./articles.json";
+//import articles from "./articles.json";
 import "./styles.scss";
-
 
 export default class Home extends Component {
   state = {
-    articles: articles,
+    fetchedArticles: [],
   };
+
+  componentDidMount = async () => {
+    console.log("finished mounting");
+    this.fetchArticles();
+  };
+
+  fetchArticles = async () => {
+    try {
+      let response = await fetch(process.env.URL);
+      if (response.ok) {
+        let results = await response.json();
+        console.log(results);
+        this.setState({ fetchedArticles: results });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
     return (
       <div>
@@ -42,7 +60,7 @@ export default class Home extends Component {
 
             <Col>
               <PeopleList />
-              <TopicsToFollow/>
+              <TopicsToFollow />
             </Col>
             <Col className={""}>{/*<TagsList />*/}</Col>
           </Row>
